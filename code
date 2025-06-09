@@ -1,5 +1,3 @@
-// Site pour un traiteur avec back-office admin, réception de devis par email
-// Frontend en React avec TailwindCSS, back-end léger en Node.js/Express (API à créer)
 
 import React from "react";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
