@@ -1,0 +1,123 @@
+// Site pour un traiteur avec back-office admin, réception de devis par email
+// Frontend en React avec TailwindCSS, back-end léger en Node.js/Express (API à créer)
+
+import React from "react";
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+
+const Header = () => (
+  <header className="bg-white shadow p-4 flex justify-between items-center">
+    <h1 className="text-2xl font-bold">Mon Traiteur</h1>
+    <nav className="space-x-4">
+      <Link to="/">Accueil</Link>
+      <Link to="/a-propos">À propos</Link>
+      <Link to="/carte">Carte</Link>
+      <Link to="/devis">Devis</Link>
+      <Link to="/galerie">Galerie</Link>
+      <Link to="/contact">Contact</Link>
+      <Link to="/admin">Admin</Link>
+    </nav>
+  </header>
+);
+
+const Footer = () => (
+  <footer className="bg-gray-100 p-4 text-center text-sm">© 2025 Mon Traiteur</footer>
+);
+
+const Accueil = () => (
+  <div className="p-4 text-center">
+    <h2 className="text-xl font-bold mb-2">Bienvenue chez Mon Traiteur</h2>
+    <p>Des plats savoureux pour tous vos événements.</p>
+  </div>
+);
+
+const APropos = () => (
+  <div className="p-4 max-w-2xl mx-auto">
+    <h2 className="text-xl font-bold mb-4">À propos</h2>
+    <p>Passionnés de cuisine maison, nous proposons une carte de saison avec des produits frais et locaux. Notre équipe vous accompagne dans tous vos événements.</p>
+  </div>
+);
+
+const Carte = () => (
+  <div className="p-4 max-w-4xl mx-auto">
+    <h2 className="text-xl font-bold mb-4">Notre carte</h2>
+    <ul className="grid md:grid-cols-3 gap-4">
+      <Card><CardContent>Entrée 1</CardContent></Card>
+      <Card><CardContent>Plat 1</CardContent></Card>
+      <Card><CardContent>Dessert 1</CardContent></Card>
+    </ul>
+  </div>
+);
+
+const Devis = () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const body = Object.fromEntries(formData.entries());
+    await fetch("/api/send-devis", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    });
+    alert("Votre demande a été envoyée.");
+    e.target.reset();
+  };
+
+  return (
+    <div className="p-4 max-w-xl mx-auto">
+      <h2 className="text-xl font-bold mb-4">Demande de devis</h2>
+      <form className="space-y-4" onSubmit={handleSubmit}>
+        <Input name="nom" placeholder="Nom" required />
+        <Input name="email" placeholder="Email" type="email" required />
+        <Input name="telephone" placeholder="Téléphone" required />
+        <Textarea name="message" placeholder="Décrivez votre événement..." required />
+        <Button type="submit">Envoyer</Button>
+      </form>
+    </div>
+  );
+};
+
+const Galerie = () => (
+  <div className="p-4 text-center">
+    <h2 className="text-xl font-bold mb-4">Galerie</h2>
+    <p>Photos à venir.</p>
+  </div>
+);
+
+const Contact = () => (
+  <div className="p-4 max-w-xl mx-auto">
+    <h2 className="text-xl font-bold mb-4">Contact</h2>
+    <p>Email : contact@montraiteur.fr</p>
+    <p>Téléphone : 06 00 00 00 00</p>
+  </div>
+);
+
+const Admin = () => (
+  <div className="p-4 max-w-2xl mx-auto">
+    <h2 className="text-xl font-bold mb-4">Espace Admin (à sécuriser)</h2>
+    <p>Affichage des demandes de devis à venir (nécessite backend).</p>
+  </div>
+);
+
+const App = () => (
+  <Router>
+    <Header />
+    <main className="min-h-screen">
+      <Routes>
+        <Route path="/" element={<Accueil />} />
+        <Route path="/a-propos" element={<APropos />} />
+        <Route path="/carte" element={<Carte />} />
+        <Route path="/devis" element={<Devis />} />
+        <Route path="/galerie" element={<Galerie />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/admin" element={<Admin />} />
+      </Routes>
+    </main>
+    <Footer />
+  </Router>
+);
+
+export default App;
